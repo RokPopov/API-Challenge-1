@@ -11,7 +11,7 @@ let isRequestInProgress = false;
  * [x] 2. Output the API's response
  * [x] 3. Attach fetchData to an event listener
  * [x] 4. Clear output after 2 seconds
- * [] 5. Optional: add loading/error states
+ * [x] 5. Optional: add loading/error states
  *
  */
 
@@ -19,6 +19,7 @@ const ballSelector = document.querySelector('#ball');
 const buttonSelector = document.querySelector('#button');
 const answerSelector = document.querySelector('#answer');
 const inputSelector = document.querySelector('#input');
+const errorSelector = document.querySelector('#error');
 
 const setIsRequestInProgress = (value) => {
   isRequestInProgress = value;
@@ -51,7 +52,7 @@ const showAnswer = (answer) => {
 
 const getAnswer = () => {
   if(isRequestInProgress) return;
-  if(!inputSelector.value) return;
+  if(!inputSelector.value) return showError();
   fetchData();
 }
 
@@ -73,5 +74,12 @@ const deleteQuestionAndAnswer = () => {
     inputSelector.value='';
     setIsRequestInProgress(false);
     setDisableButtonState(false);
+  }, 2000);
+}
+
+const showError = () => {
+  errorSelector.innerHTML = 'Did you ask the question? No. Feel free to do so.';
+  setTimeout(() => {
+    errorSelector.innerHTML = '';
   }, 2000);
 }
