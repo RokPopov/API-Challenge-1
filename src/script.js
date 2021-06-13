@@ -15,9 +15,15 @@ const API_ENDPOINT = 'https://yesno.wtf/api';
 const fetchData = () => {
   fetch(API_ENDPOINT)
     .then(res => res.json())
-    .then(res => console.log(res.data))
-    
-
+    .then(res => showAnswer(res.answer));
 }
+
+
+const showAnswer = (answer) => {
+  document.querySelector('#answer').innerHTML = `<p>${answer}</p>`;
+}
+
+
+
 
 fetchData();
