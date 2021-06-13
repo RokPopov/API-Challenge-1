@@ -22,6 +22,7 @@ ballSelector.classList.add('shake__ball');
   fetch(API_ENDPOINT)
     .then(res => res.json())
     .then(res => showAnswer(res.answer));
+    deleteQuestionAndAnswer();
 }
 
 const showAnswer = (answer) => {
@@ -35,13 +36,11 @@ const handleKeyEnter = (event) => {
   // console.log('handleKeyEnter', { event })
   if (event.keyCode === 13) {
     fetchData();
-    deleteQuestionAndAnswer();
   }
 }
 
 buttonSelector.addEventListener('click', () => {
   fetchData();
-  deleteQuestionAndAnswer();
 })
 
 const deleteQuestionAndAnswer = () => {
