@@ -1,6 +1,9 @@
 // API
 const API_ENDPOINT = 'https://yesno.wtf/api';
 
+// FLAGS
+let isRequestInProgress = false;
+
 /**
  * STEPS:
  *
@@ -17,28 +20,35 @@ const buttonSelector = document.querySelector('#button');
 const answerSelector = document.querySelector('#answer');
 const inputSelector = document.querySelector('#input');
 
+const setIsRequestInProgress = (value) => {
+  isRequestInProgress = value;
+}
+
 const disableButton = () => {
   buttonSelector.setAttribute('disabled', 'disabled');
 }
 
 const fetchData = () => {
+  setIsRequestInProgress(true);
   disableButton();
   ballSelector.classList.add('shake__ball');
   fetch(API_ENDPOINT)
     .then(res => res.json())
     .then(res => showAnswer(res.answer));
-    deleteQuestionAndAnswer();
 }
 
 const showAnswer = (answer) => {
   setTimeout(() => {
    answerSelector.innerHTML = `<p>${answer}</p>`;
    ballSelector.classList.remove('shake__ball');
-  }, 600)
+   deleteQuestionAndAnswer();
+  }, 600);
+  
 }
 
 const handleKeyEnter = (event) => {
   // console.log('handleKeyEnter', { event })
+  if(isRequestInProgress) return;
   if(!inputSelector.value) return;
   
   if (event.keyCode === 13) {
@@ -47,6 +57,8 @@ const handleKeyEnter = (event) => {
 }
 
 buttonSelector.addEventListener('click', () => {
+  if(isRequestInProgress) return;
+  
   fetchData();
 })
 
@@ -54,8 +66,11 @@ const deleteQuestionAndAnswer = () => {
   setTimeout(() => {
     answerSelector.innerHTML = '';
     inputSelector.value='';
+    setIsRequestInProgress(false);
   }, 2000)
 }
+
+
 
 
 
