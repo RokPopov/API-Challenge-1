@@ -17,8 +17,13 @@ const buttonSelector = document.querySelector('#button');
 const answerSelector = document.querySelector('#answer');
 const inputSelector = document.querySelector('#input');
 
+const disableButton = () => {
+  buttonSelector.setAttribute('disabled', 'disabled');
+}
+
 const fetchData = () => {
-ballSelector.classList.add('shake__ball');
+  disableButton();
+  ballSelector.classList.add('shake__ball');
   fetch(API_ENDPOINT)
     .then(res => res.json())
     .then(res => showAnswer(res.answer));
@@ -34,6 +39,8 @@ const showAnswer = (answer) => {
 
 const handleKeyEnter = (event) => {
   // console.log('handleKeyEnter', { event })
+  if(!inputSelector.value) return;
+  
   if (event.keyCode === 13) {
     fetchData();
   }
@@ -49,4 +56,7 @@ const deleteQuestionAndAnswer = () => {
     inputSelector.value='';
   }, 2000)
 }
+
+
+
 
