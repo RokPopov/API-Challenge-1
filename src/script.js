@@ -24,13 +24,17 @@ const setIsRequestInProgress = (value) => {
   isRequestInProgress = value;
 }
 
-const disableButton = () => {
+const setDisableButtonState = (isDisabled) => {
+  if(isDisabled) {
   buttonSelector.setAttribute('disabled', 'disabled');
+  } else {
+    buttonSelector.removeAttribute('disabled')
+  }
 }
 
 const fetchData = () => {
   setIsRequestInProgress(true);
-  disableButton();
+  setDisableButtonState(true);
   ballSelector.classList.add('shake__ball');
   fetch(API_ENDPOINT)
     .then(res => res.json())
@@ -43,7 +47,12 @@ const showAnswer = (answer) => {
    ballSelector.classList.remove('shake__ball');
    deleteQuestionAndAnswer();
   }, 600);
-  
+}
+
+const getAnswer = () => {
+  if(isRequestInProgress) return;
+  if(!inputSelector.value) return;
+  fetchData();
 }
 
 const handleKeyEnter = (event) => {
@@ -56,22 +65,13 @@ const handleKeyEnter = (event) => {
   }
 }
 
-buttonSelector.addEventListener('click', () => {
-  if(isRequestInProgress) return;
-  
-  fetchData();
-})
+buttonSelector.addEventListener('click', getAnswer);
 
 const deleteQuestionAndAnswer = () => {
   setTimeout(() => {
     answerSelector.innerHTML = '';
     inputSelector.value='';
     setIsRequestInProgress(false);
-  }, 2000)
+    setDisableButtonState(false);
+  }, 2000);
 }
-
-
-
-
-
-
